@@ -23,7 +23,7 @@
             String nombreUsu ="";
                 // PANTALLA INICIAL PRIMERA VEZ
                 conversacion.add(randomPideNombre());
-                out.print(">"+conversacion.get(0));
+                out.print(conversacion.get(0));
                 %><br>
                 <form method="post" action="inicio.jsp"  autocomplete="off">
                 > <input type="text" name="nombreUser" autofocus="autofocus">

@@ -18,73 +18,74 @@
     
     <% request.setCharacterEncoding("UTF-8");%>
     <div class="pantalla">
-          <div class="pregunta" id="scrollthis"> 
-              <% ArrayList<String> conversacion = new ArrayList<String>(); //Array que guarda la conversacion para luego mostrarla.%>
-                
+        <div class="pregunta" id="scrollthis"> 
+            <% ArrayList<String> conversacion = new ArrayList<String>(); //Array que guarda la conversacion para luego mostrarla.%>
 
-                <%
-            // HACER SIEMPRE, AL INICIO
-                String nombreUser = request.getParameter("nombreUser") ;      //guarda nombre del usuario
-            // FIN HACER SIEMPRE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                
-            // HACERLO LA PRIMERA VEZ
-                if (request.getParameter("primeraVez").equals("si")){
-                    conversacion.add(request.getParameter("respuestaBot"));     //añade respuesta del bot (0)
-                    conversacion.add("*  "+request.getParameter("nombreUser")); //añade nombre del usuario (1) 
-                    String[] splitedInicial = nombreUser.split("\\b+");         
-                    conversacion.add(detectaNombre(splitedInicial,nombreUser)); //añade respuesta 2 del bot (2)
-                    String[] splitedCopia = nombreUser.split("\\b+");           //copia seguridad nombre
-                    
-                    for( int x = 0; x < conversacion.size(); x++){              // IMPRIME LAS 3 LINEAS
-                        out.print(conversacion.get(x));
-                        %><br><%
-                    }
-                }
-            // FIN HACERLO LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-                
-            // HACERLO SINO ES LA PRIMERA VEZ
-                else if (request.getParameter("primeraVez").equals("no")){
 
-                  int tamanoArray = Integer.parseInt(request.getParameter("sizeArray"));    // Recojo el tamaño de array desde la pagina anterior
-                // Añado las lineas de  dialogo anteriores al array 
-                    for( int x = 0; x < tamanoArray; x++){                              
-                        conversacion.add(request.getParameter("chat"+x));               
-                    }
-                // Añado la linea de la respuesta del usuario de la pagina anterior
-                    conversacion.add(">  "+request.getParameter("respuestaUser"));            
-                    String respuestaSplit = request.getParameter("respuestaUser");
-                    String[] splited = respuestaSplit.split("\\b+");
-                // Funciones
-                    conversacion.add(detectaXQ(splited));
-                    conversacion.add(detectaTambien(splited));
-                    borraLineavacia(conversacion);
-                    conversacion.add(detectaSiono(splited));
-                    conversacion.add(detectaNombreEve(splited));
-                    borraLineavacia(conversacion);
-                    conversacion.add(randomRespuesta());
-                    
-                // Toda linea que no lleve nada escrito se borra del array 'conversacion'
-                    borraLineavacia(conversacion);
-                // Imprimo el nuevo array que posee ya la nueva linea integrada
-                    for( int x = 0; x < conversacion.size(); x++){
-                        out.print(conversacion.get(x)+"-"+x );
-                        %><br><%
-                    }
-                }
-            // FIN HACERLO SINO ES LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-            
-            // HACERLO SIEMPRE, AL FINAL
-            %>
-            <form method="post" action="inicio.jsp" autocomplete="off" >
-                > <input type="text" name="respuestaUser" autofocus="autofocus">
-                <% for (int x = 0; x < conversacion.size(); x++){%>
-                    <input type="hidden" name="chat<%=x%>" value="<%=conversacion.get(x)%>">
-                <%}%>
-                <input type="hidden" name="nombreUser" value="<%=request.getParameter("nombreUser")%>">
-                <input type="hidden" name="sizeArray" value="<%=conversacion.size()%>">
-                <input type="hidden" name="primeraVez" value="no">
-            </form>
-          </div>     
+              <%
+          // HACER SIEMPRE, AL INICIO
+              String nombreUser = request.getParameter("nombreUser") ;      //guarda nombre del usuario
+          // FIN HACER SIEMPRE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+          // HACERLO LA PRIMERA VEZ
+              if (request.getParameter("primeraVez").equals("si")){
+                  conversacion.add(request.getParameter("respuestaBot"));     //añade respuesta del bot (0)
+                  conversacion.add(">  "+request.getParameter("nombreUser")); //añade nombre del usuario (1) 
+                  String[] splitedInicial = nombreUser.split("\\b+");         
+                  conversacion.add(detectaNombre(splitedInicial,nombreUser)); //añade respuesta 2 del bot (2)
+                  String[] splitedCopia = nombreUser.split("\\b+");           //copia seguridad nombre
+
+                  for( int x = 0; x < conversacion.size(); x++){              // IMPRIME LAS 3 LINEAS
+                      out.print(conversacion.get(x));
+                      %><br><%
+                  }
+              }
+          // FIN HACERLO LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+          // HACERLO SINO ES LA PRIMERA VEZ
+              else if (request.getParameter("primeraVez").equals("no")){
+
+                int tamanoArray = Integer.parseInt(request.getParameter("sizeArray"));    // Recojo el tamaño de array desde la pagina anterior
+              // Añado las lineas de  dialogo anteriores al array 
+                  for( int x = 0; x < tamanoArray; x++){                              
+                      conversacion.add(request.getParameter("chat"+x));               
+                  }
+              // Añado la linea de la respuesta del usuario de la pagina anterior
+                  conversacion.add(">  "+request.getParameter("respuestaUser"));            
+                  String respuestaSplit = request.getParameter("respuestaUser");
+                  String[] splited = respuestaSplit.split("\\b+");
+              // Funciones
+                  conversacion.add(detectaXQ(splited));
+                  borraLineavacia(conversacion);
+                  conversacion.add(detectaTambien(splited));
+                  borraLineavacia(conversacion);
+                  conversacion.add(detectaSiono(splited));
+                  conversacion.add(detectaNombreEve(splited));
+                  borraLineavacia(conversacion);
+                  conversacion.add(randomRespuesta());
+
+              // Toda linea que no lleve nada escrito se borra del array 'conversacion'
+                  borraLineavacia(conversacion);
+              // Imprimo el nuevo array que posee ya la nueva linea integrada
+                  for( int x = 0; x < conversacion.size(); x++){
+                      out.print(conversacion.get(x));
+                      %><br><%
+                  }
+              }
+          // FIN HACERLO SINO ES LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+
+          // HACERLO SIEMPRE, AL FINAL
+          %>
+          <form method="post" action="inicio.jsp" autocomplete="off" >
+              > <input type="text" name="respuestaUser" autofocus="autofocus">
+              <% for (int x = 0; x < conversacion.size(); x++){%>
+                  <input type="hidden" name="chat<%=x%>" value="<%=conversacion.get(x)%>">
+              <%}%>
+              <input type="hidden" name="nombreUser" value="<%=request.getParameter("nombreUser")%>">
+              <input type="hidden" name="sizeArray" value="<%=conversacion.size()%>">
+              <input type="hidden" name="primeraVez" value="no">
+          </form>
+        </div>     
     </div>
     <script type="text/javascript">
         var objDiv = document.getElementById("scrollthis");
@@ -311,18 +312,48 @@ public static String detectaTambien(String splited[]) {
    /* Detecta si el usuario pregunta xq'.
     * Por que? que? sobre que?.
     */
-
-    if (((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("que")))){
-        randomXQ();
-      }
-    else if (((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("?")))){
-        randomXQ();
-      }
-    else if (((Arrays.asList(splited).contains("y"))&&(Arrays.asList(splited).contains("eso")))){
-        randomXQ();
-      }
-    return randomXQ();
+    String salida="";
+    if (((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("que")))||(((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("?"))))||(((Arrays.asList(splited).contains("y"))&&(Arrays.asList(splited).contains("eso"))))){
+        int random = (int) (Math.random()*17);
+  switch (random){
+    case 0: salida=" Porque lo digo yo.";
+      break;
+    case 1: salida=" Porque sabes que es así.";
+      break;
+    case 2: salida=" No, por nada..";
+      break;
+    case 3: salida=" Por que y por que y por que...";
+      break;
+    case 4: salida=" Porque la vida es maravillosa..";
+      break;
+    case 5: salida=" Por mi inteligencia..";
+      break;
+    case 6: salida=" Por pensar diferente a tí.";
+      break;
+    case 7: salida=" ¿Por que qué?";
+      break;
+    case 8: salida=" La razón de mis respuestas están escondidas en mi código..";
+      break;
+    case 9: salida=" Porque el tiempo vuela y hay que aprovecharlo.";
+      break;
+    case 10: salida=" Porque si.";
+      break;
+    case 11: salida=" Empieza por preguntarte sobre tu existencia, luego te responderé..";
+      break;
+    case 12: salida=" Cuando sepas lo que quieres hacer en la vida responderé a eso.";
+      break;
+    case 13: salida=" Cuéntame un chiste y si me gusta te diré el por qué.";
+      break;
+    case 14: salida=" Porque me gustas..";
+      break;
+    case 15: salida=" No, por nada...";
+      break;
+    case 16: salida=" Ah, por nada...";
   }
+    }
+  return salida;
+  }
+     
 public static String randomXQ() {
  /* Random de respuestas para XQ.
   * Usar en cualquier parte.

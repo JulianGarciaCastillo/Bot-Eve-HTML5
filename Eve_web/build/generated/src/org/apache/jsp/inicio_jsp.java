@@ -1,101 +1,15 @@
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.Arrays"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<%-- META QUE AJUSTA LA ESCALA DE VISIONADO EN MOVILES --%> 
-    <meta name="viewport" content="width=device-width, initial-scale=20" />
-    <title>EVE - Bot Conversacional</title>
-<%-- AÑADO LINEA PARA HOJA CSS escritorio/movil --%>
-    <link href="escritorio.css" rel="stylesheet" type="text/css" media="screen" />
+package org.apache.jsp;
 
-  </head>
+import javax.servlet.*;
+import javax.servlet.http.*;
+import javax.servlet.jsp.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
-  
-  <body>
-    
-    <% request.setCharacterEncoding("UTF-8");%>
-    <div class="pantalla">
-        <div class="pregunta" id="scrollthis"> 
-            <% ArrayList<String> conversacion = new ArrayList<String>(); //Array que guarda la conversacion para luego mostrarla.%>
+public final class inicio_jsp extends org.apache.jasper.runtime.HttpJspBase
+    implements org.apache.jasper.runtime.JspSourceDependent {
 
 
-              <%
-          // HACER SIEMPRE, AL INICIO
-              String nombreUser = request.getParameter("nombreUser") ;      //guarda nombre del usuario
-          // FIN HACER SIEMPRE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-          // HACERLO LA PRIMERA VEZ
-              if (request.getParameter("primeraVez").equals("si")){
-                  conversacion.add(request.getParameter("respuestaBot"));     //añade respuesta del bot (0)
-                  conversacion.add(">  "+request.getParameter("nombreUser")); //añade nombre del usuario (1) 
-                  String[] splitedInicial = nombreUser.split("\\b+");         
-                  conversacion.add(detectaNombre(splitedInicial,nombreUser)); //añade respuesta 2 del bot (2)
-                  String[] splitedCopia = nombreUser.split("\\b+");           //copia seguridad nombre
-
-                  for( int x = 0; x < conversacion.size(); x++){              // IMPRIME LAS 3 LINEAS
-                      out.print(conversacion.get(x));
-                      %><br><%
-                  }
-              }
-          // FIN HACERLO LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-          // HACERLO SINO ES LA PRIMERA VEZ
-              else if (request.getParameter("primeraVez").equals("no")){
-
-                int tamanoArray = Integer.parseInt(request.getParameter("sizeArray"));    // Recojo el tamaño de array desde la pagina anterior
-              // Añado las lineas de  dialogo anteriores al array 
-                  for( int x = 0; x < tamanoArray; x++){                              
-                      conversacion.add(request.getParameter("chat"+x));               
-                  }
-              // Añado la linea de la respuesta del usuario de la pagina anterior
-                  conversacion.add(">  "+request.getParameter("respuestaUser"));            
-                  String respuestaSplit = request.getParameter("respuestaUser");
-                  String[] splited = respuestaSplit.split("\\b+");
-              // Funciones
-                  conversacion.add(detectaXQ(splited));
-                  borraLineavacia(conversacion);
-                  conversacion.add(detectaTambien(splited));
-                  borraLineavacia(conversacion);
-                  conversacion.add(detectaSiono(splited));
-                  conversacion.add(detectaNombreEve(splited));
-                  borraLineavacia(conversacion);
-                  conversacion.add(randomRespuesta());
-
-              // Toda linea que no lleve nada escrito se borra del array 'conversacion'
-                  borraLineavacia(conversacion);
-              // Imprimo el nuevo array que posee ya la nueva linea integrada
-                  for( int x = 0; x < conversacion.size(); x++){
-                      out.print(conversacion.get(x));
-                      %><br><%
-                  }
-              }
-          // FIN HACERLO SINO ES LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-
-          // HACERLO SIEMPRE, AL FINAL
-          %>
-          <form method="post" action="inicio.jsp" autocomplete="off" >
-              > <input type="text" name="respuestaUser" autofocus="autofocus">
-              <% for (int x = 0; x < conversacion.size(); x++){%>
-                  <input type="hidden" name="chat<%=x%>" value="<%=conversacion.get(x)%>">
-              <%}%>
-              <input type="hidden" name="nombreUser" value="<%=request.getParameter("nombreUser")%>">
-              <input type="hidden" name="sizeArray" value="<%=conversacion.size()%>">
-              <input type="hidden" name="primeraVez" value="no">
-          </form>
-        </div>     
-    </div>
-    <script type="text/javascript">
-        var objDiv = document.getElementById("scrollthis");
-        objDiv.scrollTop = objDiv.scrollHeight;
-    </script>
-
-  </body>
-</html>
-
-<%!
 public static String randomPideNombre() {
       String salida ="";
         int random = (int) (Math.random()*14);
@@ -312,48 +226,18 @@ public static String detectaTambien(String splited[]) {
    /* Detecta si el usuario pregunta xq'.
     * Por que? que? sobre que?.
     */
-    String salida="";
-    if (((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("que")))||(((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("?"))))||(((Arrays.asList(splited).contains("y"))&&(Arrays.asList(splited).contains("eso"))))){
-        int random = (int) (Math.random()*17);
-  switch (random){
-    case 0: salida=" Porque lo digo yo.";
-      break;
-    case 1: salida=" Porque sabes que es así.";
-      break;
-    case 2: salida=" No, por nada..";
-      break;
-    case 3: salida=" Por que y por que y por que...";
-      break;
-    case 4: salida=" Porque la vida es maravillosa..";
-      break;
-    case 5: salida=" Por mi inteligencia..";
-      break;
-    case 6: salida=" Por pensar diferente a tí.";
-      break;
-    case 7: salida=" ¿Por que qué?";
-      break;
-    case 8: salida=" La razón de mis respuestas están escondidas en mi código..";
-      break;
-    case 9: salida=" Porque el tiempo vuela y hay que aprovecharlo.";
-      break;
-    case 10: salida=" Porque si.";
-      break;
-    case 11: salida=" Empieza por preguntarte sobre tu existencia, luego te responderé..";
-      break;
-    case 12: salida=" Cuando sepas lo que quieres hacer en la vida responderé a eso.";
-      break;
-    case 13: salida=" Cuéntame un chiste y si me gusta te diré el por qué.";
-      break;
-    case 14: salida=" Porque me gustas..";
-      break;
-    case 15: salida=" No, por nada...";
-      break;
-    case 16: salida=" Ah, por nada...";
+
+    if (((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("que")))){
+        randomXQ();
+      }
+    else if (((Arrays.asList(splited).contains("por"))&&(Arrays.asList(splited).contains("?")))){
+        randomXQ();
+      }
+    else if (((Arrays.asList(splited).contains("y"))&&(Arrays.asList(splited).contains("eso")))){
+        randomXQ();
+      }
+    return randomXQ();
   }
-    }
-  return salida;
-  }
-     
 public static String randomXQ() {
  /* Random de respuestas para XQ.
   * Usar en cualquier parte.
@@ -408,4 +292,170 @@ public static void borraLineavacia( ArrayList<String> conversacion){
     }
 }
 
-    %>
+    
+  private static final JspFactory _jspxFactory = JspFactory.getDefaultFactory();
+
+  private static java.util.List<String> _jspx_dependants;
+
+  private org.glassfish.jsp.api.ResourceInjector _jspx_resourceInjector;
+
+  public java.util.List<String> getDependants() {
+    return _jspx_dependants;
+  }
+
+  public void _jspService(HttpServletRequest request, HttpServletResponse response)
+        throws java.io.IOException, ServletException {
+
+    PageContext pageContext = null;
+    HttpSession session = null;
+    ServletContext application = null;
+    ServletConfig config = null;
+    JspWriter out = null;
+    Object page = this;
+    JspWriter _jspx_out = null;
+    PageContext _jspx_page_context = null;
+
+    try {
+      response.setContentType("text/html;charset=UTF-8");
+      pageContext = _jspxFactory.getPageContext(this, request, response,
+      			null, true, 8192, true);
+      _jspx_page_context = pageContext;
+      application = pageContext.getServletContext();
+      config = pageContext.getServletConfig();
+      session = pageContext.getSession();
+      out = pageContext.getOut();
+      _jspx_out = out;
+      _jspx_resourceInjector = (org.glassfish.jsp.api.ResourceInjector) application.getAttribute("com.sun.appserv.jsp.resource.injector");
+
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("<!DOCTYPE html>\n");
+      out.write("<html>\n");
+      out.write("  <head>\n");
+      out.write("    <meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\">\n");
+      out.write(" \n");
+      out.write("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=20\" />\n");
+      out.write("    <title>EVE - Bot Conversacional</title>\n");
+      out.write("\n");
+      out.write("    <link href=\"escritorio.css\" rel=\"stylesheet\" type=\"text/css\" media=\"screen\" />\n");
+      out.write("\n");
+      out.write("  </head>\n");
+      out.write("\n");
+      out.write("  \n");
+      out.write("  <body>\n");
+      out.write("    \n");
+      out.write("    ");
+ request.setCharacterEncoding("UTF-8");
+      out.write("\n");
+      out.write("    <div class=\"pantalla\">\n");
+      out.write("          <div class=\"pregunta\" id=\"scrollthis\"> \n");
+      out.write("              ");
+ ArrayList<String> conversacion = new ArrayList<String>(); //Array que guarda la conversacion para luego mostrarla.
+      out.write("\n");
+      out.write("                \n");
+      out.write("\n");
+      out.write("                ");
+
+            // HACER SIEMPRE, AL INICIO
+                String nombreUser = request.getParameter("nombreUser") ;      //guarda nombre del usuario
+            // FIN HACER SIEMPRE \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                
+            // HACERLO LA PRIMERA VEZ
+                if (request.getParameter("primeraVez").equals("si")){
+                    conversacion.add(request.getParameter("respuestaBot"));     //añade respuesta del bot (0)
+                    conversacion.add("*  "+request.getParameter("nombreUser")); //añade nombre del usuario (1) 
+                    String[] splitedInicial = nombreUser.split("\\b+");         
+                    conversacion.add(detectaNombre(splitedInicial,nombreUser)); //añade respuesta 2 del bot (2)
+                    String[] splitedCopia = nombreUser.split("\\b+");           //copia seguridad nombre
+                    
+                    for( int x = 0; x < conversacion.size(); x++){              // IMPRIME LAS 3 LINEAS
+                        out.print(conversacion.get(x));
+                        
+      out.write("<br>");
+
+                    }
+                }
+            // FIN HACERLO LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+                
+            // HACERLO SINO ES LA PRIMERA VEZ
+                else if (request.getParameter("primeraVez").equals("no")){
+
+                  int tamanoArray = Integer.parseInt(request.getParameter("sizeArray"));    // Recojo el tamaño de array desde la pagina anterior
+                // Añado las lineas de  dialogo anteriores al array 
+                    for( int x = 0; x < tamanoArray; x++){                              
+                        conversacion.add(request.getParameter("chat"+x));               
+                    }
+                // Añado la linea de la respuesta del usuario de la pagina anterior
+                    conversacion.add(">  "+request.getParameter("respuestaUser"));            
+                    String respuestaSplit = request.getParameter("respuestaUser");
+                    String[] splited = respuestaSplit.split("\\b+");
+                // Funciones
+                    conversacion.add(detectaXQ(splited));
+                    conversacion.add(detectaTambien(splited));
+                    borraLineavacia(conversacion);
+                    conversacion.add(detectaSiono(splited));
+                    conversacion.add(detectaNombreEve(splited));
+                    borraLineavacia(conversacion);
+                    conversacion.add(randomRespuesta());
+                    
+                // Toda linea que no lleve nada escrito se borra del array 'conversacion'
+                    borraLineavacia(conversacion);
+                // Imprimo el nuevo array que posee ya la nueva linea integrada
+                    for( int x = 0; x < conversacion.size(); x++){
+                        out.print(conversacion.get(x));
+                        
+      out.write("<br>");
+
+                    }
+                }
+            // FIN HACERLO SINO ES LA PRIMERA VEZ \\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+            
+            // HACERLO SIEMPRE, AL FINAL
+            
+      out.write("\n");
+      out.write("            <form method=\"post\" action=\"inicio.jsp\" autocomplete=\"off\" >\n");
+      out.write("                > <input type=\"text\" name=\"respuestaUser\" autofocus=\"autofocus\">\n");
+      out.write("                ");
+ for (int x = 0; x < conversacion.size(); x++){
+      out.write("\n");
+      out.write("                    <input type=\"hidden\" name=\"chat");
+      out.print(x);
+      out.write("\" value=\"");
+      out.print(conversacion.get(x));
+      out.write("\">\n");
+      out.write("                ");
+}
+      out.write("\n");
+      out.write("                <input type=\"hidden\" name=\"nombreUser\" value=\"");
+      out.print(request.getParameter("nombreUser"));
+      out.write("\">\n");
+      out.write("                <input type=\"hidden\" name=\"sizeArray\" value=\"");
+      out.print(conversacion.size());
+      out.write("\">\n");
+      out.write("                <input type=\"hidden\" name=\"primeraVez\" value=\"no\">\n");
+      out.write("            </form>\n");
+      out.write("          </div>     \n");
+      out.write("    </div>\n");
+      out.write("    <script type=\"text/javascript\">\n");
+      out.write("        var objDiv = document.getElementById(\"scrollthis\");\n");
+      out.write("        objDiv.scrollTop = objDiv.scrollHeight;\n");
+      out.write("    </script>\n");
+      out.write("\n");
+      out.write("  </body>\n");
+      out.write("</html>\n");
+      out.write("\n");
+      out.write('\n');
+    } catch (Throwable t) {
+      if (!(t instanceof SkipPageException)){
+        out = _jspx_out;
+        if (out != null && out.getBufferSize() != 0)
+          out.clearBuffer();
+        if (_jspx_page_context != null) _jspx_page_context.handlePageException(t);
+        else throw new ServletException(t);
+      }
+    } finally {
+      _jspxFactory.releasePageContext(_jspx_page_context);
+    }
+  }
+}
