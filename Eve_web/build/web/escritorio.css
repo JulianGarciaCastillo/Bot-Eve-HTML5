@@ -1,0 +1,123 @@
+
+/*
+ * Hoja css EJ2
+ *    Created on : Apr 28, 2015, 11:15:09 AM
+ *    Author     : Julian Garcia Castillo
+ */
+@font-face {
+    font-family: "Computer";
+    font-style: normal;
+    font-weight: normal;
+    src: local("?"), url("computer_pixel-7.woff") format("woff"), url("computer_pixel-7.ttf") format("truetype");
+}
+body{
+  background-image: url(img/fondoBase.jpg);
+  background-color: black;
+  background-position: center center;                                           /*Bg completamente centrado*/
+  background-repeat: no-repeat;                                                 /*Evita repeticiones*/
+  background-size: cover;                                                       /*Provoca que bg cubra todo*/
+  background-attachment: fixed;                                                 /*Si hay contenido mas alto, bg fijo*/
+  text-align: center;
+  min-width: 1500px;
+}
+.pantalla {
+    display: inline-block;
+    height: 920px;
+    width: 1185px;
+    margin: 0px auto auto;
+    background-image: url(img/fondoTerminal.png);
+    background-size: 98%;                                                       /*Provoca que bg cubra todo*/
+    background-repeat: no-repeat;                                                 /*Evita repeticiones*/
+    min-width: 450px;
+}
+.pregunta{
+    
+    background-image: url(img/fondoPantalla.jpg);
+    text-align: left;
+    margin-left: 20px;
+    width: 780px;
+    background-size: 80%;
+    background-repeat: no-repeat;
+    overflow-y: scroll;
+    color: #1b1b1b;
+    padding-left: 125px;
+    padding-right: 65px;
+    margin-top: 150px;
+    margin-bottom: 10px;
+    height: 525px;
+    font-size: 180%;
+    font-family: Computer;
+    color: #00c50b;
+    -webkit-animation-name: glow;
+    -webkit-animation-duration: 0.12s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function:linear;
+}
+@-webkit-keyframes glow {
+	0% { text-shadow: 0 0 1px #003603; }
+	50% { text-shadow: 0 0 2px #00ff16; }
+	100% { text-shadow: 0 0 1px #003603; }
+	}
+.cursor {
+  font-weight: 100;
+  font-family: Roman;
+  font-size: 25px;
+  color: #00c50b;
+  -webkit-animation: 0.5s blink step-end infinite;
+  -moz-animation: 0.5s blink step-end infinite;
+  -ms-animation: 0.5s blink step-end infinite;
+  -o-animation: 0.5s blink step-end infinite;
+  animation: 0.5s blink step-end infinite;
+}
+@-webkit-keyframes blink {
+  from, to {
+    color: transparent;
+  }
+  50% {
+    color: #00c50b;
+  }
+}
+input[type="text"]{
+    background:none;
+    border: none;
+    outline: none;
+    font-family: Computer;
+    color: #00c50b;
+    font-size: 100%;
+    -webkit-animation-name: glow;
+    -webkit-animation-duration: 0.12s;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-timing-function:linear;
+    width: 700px;
+}
+
+
+
+
+
+
+/*AJUSTES SCROLLBAR PERSONALIZADA*/
+::-webkit-scrollbar {
+      width: 9px;
+} /* this targets the default scrollbar (compulsory) */
+::-webkit-scrollbar-track {
+      background-color: #34422b;
+      visibility: hidden;
+      //background-color: #b49d67;
+} /* the new scrollbar will have a flat appearance with the set background color */
+ 
+::-webkit-scrollbar-thumb {
+      background-color: rgba(0, 61, 15, 1); 
+      //background-color: rgba(0, 0, 0, 0.2); 
+} /* this will style the thumb, ignoring the track */
+ 
+::-webkit-scrollbar-button {
+      background-color: #006005;
+} /* optionally, you can style the top and the bottom buttons (left and right for horizontal bars) */
+ 
+::-webkit-scrollbar-corner {
+      background-color: black;
+} /* if both the vertical and the horizontal bars appear, then perhaps the right bottom corner also needs to be styled */
+
+/*FIN AJUSTES SCROLLBAR PERSONALIZADA*/
+
